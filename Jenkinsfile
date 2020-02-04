@@ -40,9 +40,9 @@ spec:
 EOF
             """
       echo "build"           
-  }
-  stage("Deploy to k8s") {                
-    script {
+}
+stage("Deploy to k8s") {                
+  script {
       try{
         kubernetesDeploy configs: '', kubeConfig: [path: ''], kubeconfigId: 'k8s.agent.01', secretName: '', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
         sh """kubectl apply -f /home/ubuntu/pod.yml > /home/ubuntu/startPod.log"""
@@ -50,10 +50,9 @@ EOF
       }catch(error){
         echo "catch"                  
       }
-    }        
-  }
-  stage("Test if pods is deployed") {
+  }        
+}
+stage("Test if pods is deployed") {
     sh """kubectl get pods > /home/ubuntu/getPods.log"""
     echo "test"     
-  }
 }
