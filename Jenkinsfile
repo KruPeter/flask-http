@@ -4,7 +4,6 @@ node("linux"){
   }
   
   stage("Create Docker Image") {
-    //Dockerfile
     app = docker.build("peterkr/opsschool-project")
   }
 
@@ -19,19 +18,20 @@ node("linux"){
       app.push()
     }
   }
-}
-  stage("Build") {
-   script {
+
+  stage("Deploy") {                
+    script {
       try{
-        sh """kubectl apply -f apply opsschool-project"""
+        kubernetesDeploy configs: '', dockerCredentials: [[credentialsId: 'dockerhub.peterkr', url: 'https://hub.docker.com/repository/docker/peterkr/opsschool-project']], kubeConfig: [path: ''], kubeconfigId: 'k8s.agent.01', secretName: '', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
+        sh "kubectl apply -f opsschool-project"
         echo "try"
       }catch(error){
         echo "catch"                  
       }
-    } 
+    }        
   }
-
-stage("Test if pods is deployed") {
-    sh """kubectl get pods > /home/ubuntu/getPods.log"""
-    echo "test"     
+  stage("Test if pods is deployed") {
+        sh "kubectl get pods"
+        echo "test"     
+  }
 }
