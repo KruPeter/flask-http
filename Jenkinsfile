@@ -13,7 +13,7 @@ node("linux"){
   }
 
   stage("Push to DockerHub") {
-    withDockerRegistry(credentialsId: 'dockerhub.peterkr', url: '') 
+    withDockerRegistry(credentialsId: 'dockerhub.peter.krumer', url: '') 
     {
       app.push()
     }
