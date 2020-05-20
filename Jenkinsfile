@@ -19,6 +19,6 @@ node("linux"){
     }
   }
   stage('Slack it'){
-    slackSend color: slackColor, message: "Build finished with ${end}: ${env.JOB_NAME} #${env.BUILD_NUMBER}"
+    slackSend color: "#439FE0", message: "Build finished with ${end}: ${env.JOB_NAME} #${env.BUILD_NUMBER}"
   }
 }
