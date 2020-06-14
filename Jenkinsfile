@@ -4,7 +4,7 @@ node("linux"){
   }
   
   stage("Create Docker Image") {
-    app = docker.build("peterkr/opsschool-project")
+    customImage = docker.build("peterkr/opsschool-project")
   }
 
   stage("verify Docker Image") 
@@ -13,9 +13,10 @@ node("linux"){
   }
 
   stage("Push to DockerHub") {
+    customImage = docker.build("peterkr/opsschool-project:${env.BUILD_ID}")
     withDockerRegistry(credentialsId: 'dockerhub.peter.krumer', url: '') 
     {
-      app.push()
+      customImage.push()
     }
   }
   stage('Slack it'){
