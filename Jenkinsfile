@@ -21,9 +21,9 @@ node("linux"){
   }
   
   stage('Apply Kubernetes files') {
-    withAWS(region: 'us-east-1', credentials: 'AWSK8S') {
+    withAWS(region: 'us-east-1') {
 sh """
-aws eks update-kubeconfig --name eks-cluster-flask
+aws eks update-kubeconfig --name opsSchool-eks-project
 cat <<EOF | kubectl apply -f -
 apiVersion: v1      # for versions before 1.9.0 use apps/v1beta2
 kind: Service
