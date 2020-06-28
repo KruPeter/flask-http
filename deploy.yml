@@ -29,6 +29,6 @@ spec:
     spec:
       containers:
       - name: flask
-        image: peterkr/opsschool-project:latest
+        image: peterkr/opsschool-project:${env.BUILD_ID}
         ports:
         - containerPort: 5000
