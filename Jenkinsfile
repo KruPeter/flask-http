@@ -21,7 +21,7 @@ node("linux"){
   }
   
   stage('Apply Kubernetes files') {
-    withAWS(region: 'us-east-1', role: 'AWSK8S') {
+    withAWS(region: 'us-east-1') {
 sh """
 aws eks update-kubeconfig --name opsSchool-eks-project
 cat <<EOF | kubectl apply -f -
