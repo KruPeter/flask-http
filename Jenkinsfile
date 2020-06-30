@@ -23,12 +23,8 @@ node("linux"){
       stage("deploy to EKS") {
 kubernetesDeploy configs: 'deploy.yml', kubeConfig: [path: ''], kubeconfigId: 'AWSK8s', secretName: '', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
     sh '''
-        export KUBECONFIG=/home/ubuntu/kubeconfig_opsSchool-eks
         kubectl apply -f deployment.yml
         kubectl set image deployment/flask flask=peterkr/opsschool-project:"${BUILD_NUMBER}" --record
-   	    //kubectl apply -f service.yml
-        //kubectl apply -f loadbalancer.yml
-        kubectl get svc phonebook-lb -o jsonpath="{.status.loadBalancer.ingress[*]['ip', 'hostname']}" > appUrl.txt
     '''
     }
 
