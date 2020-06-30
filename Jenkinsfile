@@ -21,6 +21,7 @@ node("linux"){
   }
   
       stage("deploy to EKS") {
+        withCredentials([kubeconfigFile(credentialsId: 'AWSK8s', variable: 'KUBECONFIG')]) {
     sh '''
         export KUBECONFIG=/home/ubuntu/kubeconfig_opsSchool-eks
         kubectl apply -f deployment.yml
