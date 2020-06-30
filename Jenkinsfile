@@ -21,6 +21,7 @@ node("linux"){
   }
   
       stage("deploy to EKS") {
+        withCredentials([kubeconfigFile(credentialsId: 'AWSK8S', variable: 'KUBECONFIG')]) {
     sh '''
         kubectl apply -f deployment.yml
         kubectl set image deployment/flask flask=peterkr/opsschool-project:"${BUILD_NUMBER}" --record
@@ -29,7 +30,7 @@ node("linux"){
         kubectl get svc phonebook-lb -o jsonpath="{.status.loadBalancer.ingress[*]['ip', 'hostname']}" > appUrl.txt
     '''
     }
- 
+ }
   stage('Slack it'){
     slackSend color: "#439FE0", message: "Build Started: ${env.JOB_NAME} ${env.BUILD_NUMBER}"
   }
