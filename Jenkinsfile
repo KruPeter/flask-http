@@ -22,7 +22,7 @@ node("linux"){
   
       stage("deploy to EKS") {
     sh '''
-        export KUBECONFIG=/home/ubuntu/kubeconfig_opsSchool-eks
+        //export KUBECONFIG=/home/ubuntu/kubeconfig_opsSchool-eks
         kubectl apply -f deployment.yml
         kubectl set image deployment/flask flask=peterkr/opsschool-project:"${BUILD_NUMBER}" --record
    	    //kubectl apply -f service.yml
