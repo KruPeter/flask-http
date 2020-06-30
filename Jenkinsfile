@@ -30,7 +30,7 @@ kubernetesDeploy configs: '', kubeConfig: [path: ''], kubeconfigId: 'AWSK8S', se
         kubectl get svc phonebook-lb -o jsonpath="{.status.loadBalancer.ingress[*]['ip', 'hostname']}" > appUrl.txt
     '''
     }
- }
+  
   stage('Slack it'){
     slackSend color: "#439FE0", message: "Build Started: ${env.JOB_NAME} ${env.BUILD_NUMBER}"
   }
