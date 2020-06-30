@@ -21,7 +21,7 @@ node("linux"){
   }
   
       stage("deploy to EKS") {
-        withCredentials([kubeconfigFile(credentialsId: 'AWSK8s', variable: 'KUBECONFIG')]) {
+kubernetesDeploy configs: 'ttt.yml', kubeConfig: [path: ''], kubeconfigId: 'AWSK8s', secretName: '', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
     sh '''
         export KUBECONFIG=/home/ubuntu/kubeconfig_opsSchool-eks
         kubectl apply -f deployment.yml
@@ -31,7 +31,7 @@ node("linux"){
         kubectl get svc phonebook-lb -o jsonpath="{.status.loadBalancer.ingress[*]['ip', 'hostname']}" > appUrl.txt
     '''
     }
- }
+
   stage('Slack it'){
     slackSend color: "#439FE0", message: "Build Started: ${env.JOB_NAME} ${env.BUILD_NUMBER}"
   }
