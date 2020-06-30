@@ -9,7 +9,7 @@ spec:
   ports:
   - protocol: TCP
     port: 80
-    targetPort: 5000
+    targetPort: 8080
   selector:
     app: flask
 ---
@@ -31,4 +31,4 @@ spec:
       - name: flask
         image: peterkr/opsschool-project:${env.BUILD_ID}
         ports:
-        - containerPort: 5000
+        - containerPort: 8080
