@@ -20,50 +20,41 @@ node("linux"){
     }
   }
   
-  stage('Apply Kubernetes files') {
-    withAWS(region: 'us-east-1', credentials: 'AWSK8S') {
-sh """
-aws eks update-kubeconfig --name opsSchool-eks-project
-cat <<EOF | kubectl apply -f -
-apiVersion: v1      # for versions before 1.9.0 use apps/v1beta2
-kind: Service
+  stage("Prepare K8S yaml file") {
+    sh """
+      tee /home/ubuntu/pod.yml <<-'EOF'
+apiVersion: v1
+kind: Pod
 metadata:
-  name: flask-service
+  name: flask
   labels:
     app: flask
 spec:
-  type: LoadBalancer
-  ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 5000
-  selector:
-    app: flask
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: flask-deployment
-spec:
-  selector:
-    matchLabels:
-      app: flask
-  replicas: 2 # tells deployment to run 2 pods matching the template
-  template:
-    metadata:
-      labels:
-        app: flask
-    spec:
-      containers:
-      - name: flask
-        image: peterkr/opsschool-project:${env.BUILD_ID}
-        ports:
-        - containerPort: 5000
+  containers:
+  - name: flask
+    image:  peterkr/opsschool-project:${env.BUILD_ID}
+    ports:
+    - containerPort: 8080
+      name: http
+      protocol: TCP
 EOF
-"""
-    }
+            """
+      echo "build"
   }
   
+  
+  stage("Deploy") {                
+    script {
+      try{
+        //kubernetesDeploy configs: 'ttt.yml', kubeConfig: [path: ''], kubeconfigId: 'k8s-test', secretName: '', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
+        sh """kubectl apply -f /home/ubuntu/pod.yml > /home/ubuntu/startPod.log"""
+        echo "try"
+      }catch(error){
+        echo "catch"                  
+      }
+    }        
+  }
+ 
   stage('Slack it'){
     slackSend color: "#439FE0", message: "Build Started: ${env.JOB_NAME} ${env.BUILD_NUMBER}"
   }
