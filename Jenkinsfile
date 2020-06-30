@@ -21,7 +21,7 @@ node("linux"){
   }
   
       stage("deploy to EKS") {
-kubernetesDeploy configs: 'ttt.yml', kubeConfig: [path: ''], kubeconfigId: 'AWSK8s', secretName: '', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
+kubernetesDeploy configs: 'deploy.yml', kubeConfig: [path: ''], kubeconfigId: 'AWSK8s', secretName: '', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
     sh '''
         export KUBECONFIG=/home/ubuntu/kubeconfig_opsSchool-eks
         kubectl apply -f deployment.yml
