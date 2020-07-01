@@ -21,10 +21,9 @@ node("linux"){
   }
   
       stage("deploy to EKS") {
-kubernetesDeploy configs: 'deploy.yml', kubeConfig: [path: ''], kubeconfigId: 'AWSK8s', secretName: '', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
     sh '''
+        aws eks --region us-east-1 update-kubeconfig --name opsSchool-eks-project
         kubectl apply -f deployment.yml
-        kubectl set image deployment/flask flask=peterkr/opsschool-project:"${BUILD_NUMBER}" --record
     '''
     }
 
