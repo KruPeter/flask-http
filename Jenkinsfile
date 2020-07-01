@@ -23,7 +23,6 @@ node("linux"){
       stage("deploy to EKS") {
     sh '''
         export KUBECONFIG=/home/ubuntu/opsSchool-eks-project
-        //aws eks --region us-east-1 update-kubeconfig --name opsSchool-eks-project
         kubectl apply -f deployment.yml
     '''
     }
