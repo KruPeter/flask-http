@@ -20,12 +20,6 @@ node("linux"){
     }
   }
   
-      stage("deploy to EKS") {
-    sh '''
-        export KUBECONFIG=/home/ubuntu/opsSchool-eks-project
-        kubectl apply -f deployment.yml
-    '''
-    }
 
   stage('Slack it'){
     slackSend color: "#439FE0", message: "Build Started: ${env.JOB_NAME} ${env.BUILD_NUMBER}"
