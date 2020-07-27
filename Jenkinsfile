@@ -5,8 +5,8 @@ node("linux"){
     checkout scm
   }
   
-  stage("docker build") {
-    customImage = docker.build("peterkr/flask-http")
+  stage("Docker build") {
+    app = sh(script: 'docker build -q -f Dockerfile -t peterkr/flask-http .', returnStdout: true)
   }
 
   stage("verify Docker Image") 
