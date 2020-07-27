@@ -5,13 +5,9 @@ node("linux"){
     checkout scm
   }
   
-    stage('Building image') {
-      steps{
-        script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER"
-        }
-      }
-    }
+  stage("Create Docker Image") {
+    app = sh(script: 'docker build -q -f Dockerfile -t peterkr/flask-http .', returnStdout: true)
+  }
 
   stage("verify Docker Image") 
   {
