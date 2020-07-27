@@ -1,10 +1,12 @@
 node("linux"){
   stage("Get Repo from brach") {
+    git branch: 'master',
+    url: 'https://github.com/KruPeter/flask-http.git' 
     checkout scm
   }
   
   stage("Create Docker Image") {
-    customImage = docker.build("peterkr/opsschool-project")
+    app = sh(script: 'docker build -q -f Dockerfile -t peterkr/flask-http .', returnStdout: true)
   }
 
   stage("verify Docker Image") 
@@ -13,7 +15,7 @@ node("linux"){
   }
 
   stage("Push to DockerHub") {
-    customImage = docker.build("peterkr/opsschool-project:${env.BUILD_ID}")
+    customImage = docker.build("peterkr/flask-http:${env.BUILD_ID}")
     withDockerRegistry(credentialsId: 'dockerhub.peter.krumer', url: '') 
     {
       customImage.push()
