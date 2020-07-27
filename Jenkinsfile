@@ -5,9 +5,9 @@ node("linux"){
     checkout scm
   }
   
-  stage('Build') { // Run the docker build
-    sh "docker build --tag ${DockerImage} ."
-  }
+    stage("docker build") {
+        customImage = docker.build("peterkr/opsschool-project")
+    }  
 
   stage("verify Docker Image") 
   {
