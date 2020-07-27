@@ -5,9 +5,12 @@ node("linux"){
     checkout scm
   }
   
-    stage("docker build") {
-        customImage = docker.build("peterkr/opsschool-project")
-    }  
+ stage("build docker") {
+    customImage = docker.build("peterkr/opsschool-project:${env.BUILD_ID}")
+    withDockerRegistry(credentialsId: 'dockerhub.peter.krumer') {
+        customImage.push()
+    }
+ }
 
   stage("verify Docker Image") 
   {
