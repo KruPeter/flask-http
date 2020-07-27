@@ -5,9 +5,13 @@ node("linux"){
     checkout scm
   }
   
-    stage("Create Docker Image") {
-    customImage = docker.build("peterkr/opsschool-project")
-  }
+    stage('Building image') {
+      steps{
+        script {
+          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+        }
+      }
+    }
 
   stage("verify Docker Image") 
   {
