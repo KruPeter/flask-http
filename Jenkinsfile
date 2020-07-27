@@ -5,8 +5,8 @@ node("linux"){
     checkout scm
   }
   
-  stage("Docker build") {
-    app = sh(script: 'docker build -q -f Dockerfile -t peterkr/flask-http .', returnStdout: true)
+    stage("Create Docker Image") {
+    customImage = docker.build("peterkr/opsschool-project")
   }
 
   stage("verify Docker Image") 
@@ -15,13 +15,12 @@ node("linux"){
   }
 
   stage("Push to DockerHub") {
-    customImage = docker.build("peterkr/flask-http:${env.BUILD_ID}")
+    customImage = docker.build("peterkr/opsschool-project:${env.BUILD_ID}")
     withDockerRegistry(credentialsId: 'dockerhub.peter.krumer', url: '') 
     {
       customImage.push()
     }
   }
-  
 
   stage('Slack it'){
     slackSend color: "#439FE0", message: "Build Started: ${env.JOB_NAME} ${env.BUILD_NUMBER}"
