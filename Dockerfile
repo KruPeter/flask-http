@@ -1,7 +1,6 @@
 FROM alpine:latest
-
-RUN apk update && \
-    apk add  python
+    
+RUN apk update -y && apk install -y python-pip python-dev
 
 # We copy just the requirements.txt first to leverage Docker cache
 COPY ./requirements.txt /app/requirements.txt
