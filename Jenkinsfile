@@ -70,7 +70,6 @@ node("linux"){
         """
       }
     }
-  }
     
   stage('Slack it'){
     slackSend color: "#439FE0", message: "Build Started: ${env.JOB_NAME} ${env.BUILD_NUMBER}"
