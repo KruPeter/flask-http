@@ -31,7 +31,8 @@ node("linux"){
   
   stage("expose service") { // Expose the app to the world
     kubernetesDeploy(configs: 'service.yml', enableConfigSubstitution: true)
-    
+    }
+  
   stage('Slack it'){
     slackSend color: "#439FE0", message: "Build Started: ${env.JOB_NAME} ${env.BUILD_NUMBER}"
   }
