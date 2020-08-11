@@ -26,7 +26,27 @@ node("linux"){
   }
   
   stage("deploy to EKS") {
-    kubernetesDeploy(configs: 'deployment.yml', enableConfigSubstitution: true)
+    //kubernetesDeploy(configs: 'deployment.yml', enableConfigSubstitution: true)
+    withAWS(region: 'us-east-1', credentials: 'awsk8s'){
+      sh """
+      cat <<EOF | kubectl apply -f -
+apiVersion: v1      # for versions before 1.9.0 use apps/v1beta2
+kind: Service
+metadata:
+  name: flask-service
+  labels:
+    app: flask
+spec:
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 5000
+  selector:
+    app: flask
+---
+      """
+    }
     }
   
   stage("expose service") { // Expose the app to the world
