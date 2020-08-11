@@ -27,7 +27,7 @@ node("linux"){
   
   stage("deploy to EKS") {
     //kubernetesDeploy(configs: 'deployment.yml', enableConfigSubstitution: true)
-    withAWS(region: 'us-east-1', credentials: 'awsk8s'){
+    withAWS(region: 'us-east-1', credentials: 'awsk8s-1'){
       sh """
       cat <<EOF | kubectl apply -f -
 apiVersion: v1      # for versions before 1.9.0 use apps/v1beta2
