@@ -26,11 +26,11 @@ node("linux"){
   }
   
   stage("deploy to EKS") {
-  //  sh "aws eks --region us-east-1 update-kubeconfig --name opsSchool-eks-project"
-    sh "kubectl apply -f service.yml"
-    sh "kubectl apply -f deployment.yml"
-
+    kubernetesDeploy(configs: 'deployment.yml', enableConfigSubstitution: true)
     }
+  
+  stage("expose service") { // Expose the app to the world
+    kubernetesDeploy(configs: 'service.yml', enableConfigSubstitution: true)
     
   stage('Slack it'){
     slackSend color: "#439FE0", message: "Build Started: ${env.JOB_NAME} ${env.BUILD_NUMBER}"
