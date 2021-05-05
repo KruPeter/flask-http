@@ -29,11 +29,38 @@ node("linux"){
   sh "docker images"
  }
 	
-  stage('List pods') {
-    withKubeConfig([credentialsId: 'kubernetes-config']) {
-        sh ' curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl'  
-        sh 'chmod u+x ./kubectl'  
-        sh './kubectl get pods'
+stage('Apply Kubernetes files') {
+    withAWS(region: 'us-east-1') {
+sh """
+aws eks update-kubeconfig --name test-cluster
+cat <<EOF | kubectl apply -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deployment
+  labels:
+    app: webapp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - name: webapp
+        image: peterkr/opsschool-project:latest
+        ports:
+        - name: http
+          protocol: TCP
+          containerPort: 5000
+      restartPolicy: Always
+	  
+EOF
+"""
     }
   }
 }
