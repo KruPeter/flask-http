@@ -24,12 +24,8 @@ node("linux"){
       customImage.push()
     }
   }
-  
-   stage("verify dockers") {
-  sh "docker images"
- }
 	
-stage('Apply Kubernetes files') {
+stage('Deploy to k8s') {
     withAWS(region: 'us-east-1') {
 sh """
 aws eks update-kubeconfig --name test-cluster
