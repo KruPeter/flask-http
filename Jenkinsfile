@@ -33,7 +33,7 @@ stage('Apply Kubernetes files') {
     withAWS(region: 'us-east-1') {
 sh """
 aws eks update-kubeconfig --name test-cluster
-cat <<EOF | kubectl apply -f
+cat <<EOF | kubectl apply -f -
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -52,7 +52,7 @@ spec:
     spec:
       containers:
         name: webapp
-        image: peterkr/opsschool-project:latest
+        image: "peterkr/opsschool-project"
         ports:
           name: http
           protocol: TCP
