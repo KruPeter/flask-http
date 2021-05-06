@@ -33,7 +33,22 @@ stage('Apply Kubernetes files') {
     withAWS(region: 'us-east-1') {
 sh """
 aws eks update-kubeconfig --name test-cluster
+
 cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-lb
+  labels:
+    app: webapp
+spec:
+  ports:
+  - port: 80
+    targetPort: 5000
+  selector:
+    app: webapp
+  type: LoadBalancer
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
