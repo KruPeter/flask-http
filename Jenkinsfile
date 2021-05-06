@@ -52,7 +52,7 @@ spec:
     spec:
       containers:
       - name: webapp
-        image: "peterkr/opsschool-project"
+        image: peterkr/opsschool-project:latest
         ports:
         - name: http
           protocol: TCP
