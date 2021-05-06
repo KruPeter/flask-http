@@ -33,31 +33,24 @@ stage('Apply Kubernetes files') {
     withAWS(region: 'us-east-1') {
 sh """
 aws eks update-kubeconfig --name test-cluster
+
 cat <<EOF | kubectl apply -f -
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Service
 metadata:
-  name: webapp-deployment
+  name: webapp-service
   labels:
     app: webapp
 spec:
-  replicas: 2
+  type: NodePort
   selector:
-    matchLabels:
-      app: webapp
-  template:
-    metadata:
-      labels:
-        app: webapp
-    spec:
-      containers:
-      - name: webapp
-        image: peterkr/opsschool-project:latest
-        ports:
-        - name: http
-          protocol: TCP
-          containerPort: 5000
-      restartPolicy: Always
+    app: webapp 
+  ports:
+  - name: http
+    port: 80
+    targetPort: 5000
+    nodePort: 32000
+    protocol: TCP
 	  
 EOF
 """
