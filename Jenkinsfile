@@ -51,10 +51,10 @@ spec:
         app: webapp
     spec:
       containers:
-        name: webapp
+      - name: webapp
         image: "peterkr/opsschool-project"
         ports:
-          name: http
+        - name: http
           protocol: TCP
           containerPort: 5000
       restartPolicy: Always
