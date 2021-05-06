@@ -19,7 +19,7 @@ node("linux"){
 
   stage("Push to DockerHub") {
     customImage = docker.build("peterkr/opsschool-project:${env.BUILD_ID}")
-    withDockerRegistry(credentialsId: 'dockerhub.peter.krumer', url: '') 
+    withDockerRegistry(credentialsId: 'dockerhub.peter.krumer', url: '')
     {
       customImage.push()
     }
@@ -33,7 +33,6 @@ stage('Apply Kubernetes files') {
     withAWS(region: 'us-east-1') {
 sh """
 aws eks update-kubeconfig --name test-cluster
-
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Service
@@ -44,14 +43,13 @@ metadata:
 spec:
   type: NodePort
   selector:
-    app: webapp 
+    app: webapp
   ports:
     name: http
     port: 80
     targetPort: 5000
     nodePort: 32000
     protocol: TCP
-	  
 EOF
 """
     }
