@@ -63,7 +63,7 @@ spec:
     spec:
       containers:
       - name: webapp
-        image: peterkr/opsschool-project:23
+        image: peterkr/opsschool-project:${BUILD_ID}
         ports:
         - name: http
           protocol: TCP
